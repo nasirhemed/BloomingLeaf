@@ -24,7 +24,7 @@ function getLinks(){
 		var target = "-";
 		//TODO: Actually get the ABS value, if it exists.
 		var absValue;
-		if(graph.getLinks()[i].attr('.assigned_time')[0])
+		if(graph.getLinks()[i].attr('.assigned_time'))
 			absValue = parseInt(graph.getLinks()[i].attr('.assigned_time')[0]);
 		
 		if (current.get("source").id)
