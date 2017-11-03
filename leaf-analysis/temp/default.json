@@ -1,6 +1,6 @@
 {
   "analysis": {
-    "action": "allNextStates",
+    "action": "singlePath",
     "maxAbsTime": "100",
     "conflictLevel": "S",
     "numRelTime": "5",
