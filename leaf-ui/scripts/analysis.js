@@ -1,19 +1,26 @@
-//Get necessary variables from the main page
-var document = jQuery.extend({}, window.opener.document);
-var graph = new joint.dia.Graph();
-var paper;
-var paperScroller;
-var originalResults = jQuery.extend({}, window.opener.global_analysisResult);
+//Defining local scope
+var analysis = {};
+//This attribute has the html elements from parent page
+analysis.page = jQuery.extend({}, window.opener.document);
+
+//Page objects
+analysis.graph = new joint.dia.Graph();
+analysis.paper;
+analysis.paperScroller;
+
+//Objects from parent page
+analysis.parent.results = jQuery.extend({}, window.opener.global_analysisResult);
+
 var analysisResult;
 var elements = [];
 var currentState;
 
-	paper = new joint.dia.Paper({
+	analysis.paper = new joint.dia.Paper({
 	    width: 1200,
 	    height: 600,
 	    gridSize: 10,
 	    perpendicularLinks: false,
-	    model: graph,
+	    model: analysis.graph,
 	    defaultLink: new joint.dia.Link({
 			'attrs': {
 				'.connection': {stroke: '#000000'},
@@ -24,17 +31,17 @@ var currentState;
 		})
 	});
 
-	var paperScroller = new joint.ui.PaperScroller({
+	analysis.paperScroller = new joint.ui.PaperScroller({
 		autoResizePaper: true,
-		paper: paper
+		paper: analysis.paper
 	});
 
-	$('#paper').append(paperScroller.render().el);
-	paperScroller.center();
+	$('#paper').append(analysis.paperScroller.render().el);
+	analysis.paperScroller.center();
 
 	//Load graph by the cookie
-	if (document.cookie){
-		var cookies = document.cookie.split(";");
+	if (analysis.page.cookie){
+		var cookies = analysis.page.cookie.split(";");
 		var prevgraph = "";
 
 		//Loop through the cookies to find the one representing the graph, if it exists
@@ -46,18 +53,18 @@ var currentState;
 		}
 
 		if (prevgraph){
-			graph.fromJSON(JSON.parse(prevgraph));
+			analysis.graph.fromJSON(JSON.parse(prevgraph));
 		}
 	}
 	
 	//Filter out Actors
-	for (var e = 0; e < graph.getElements().length; e++){
-		if (!(graph.getElements()[e] instanceof joint.shapes.basic.Actor))
-			elements.push(graph.getElements()[e]);
+	for (var e = 0; e < analysis.graph.getElements().length; e++){
+		if (!(analysis.graph.getElements()[e] instanceof joint.shapes.basic.Actor))
+			elements.push(analysis.graph.getElements()[e]);
 	}
 
 	if(!analysisResult)
-		analysisResult = originalResults;
+		analysisResult = analysis.parent.results;
 	
 window.onload = function(){
 	renderNavigationSidebar();	
@@ -66,8 +73,8 @@ window.onload = function(){
 function renderNavigationSidebar(currentPage = 0){
 	clear_pagination_values();
 	
-	var currentPageIn = document.getElementById("currentPage");
-	var num_states_lbl = document.getElementById("num_states_lbl");
+	var currentPageIn = analysis.page.getElementById("currentPage");
+	var num_states_lbl = analysis.page.getElementById("num_states_lbl");
 	num_states_lbl.innerHTML += (analysisResult.allSolution.length);
 	
 	currentPageIn.value = currentPage.toString();
@@ -127,7 +134,7 @@ function updateNodesValues(currentPage, step = 0){
 }
 
 function updatePagination(currentPage){
-	var pagination = document.getElementById("pagination");
+	var pagination = analysis.page.getElementById("pagination");
 	var nextSteps_array_size = analysisResult.allSolution.length;
 	if(nextSteps_array_size > 6){
 		renderPreviousBtn(pagination, currentPage);
@@ -179,7 +186,7 @@ function renderForwardBtn(pagination, currentPage){
 }
 
 function render_pagination_values(currentPage, i){
-	var pagination = document.getElementById("pagination");
+	var pagination = analysis.page.getElementById("pagination");
 	if(currentPage == i){
 		pagination.innerHTML += '<a href="#" class="active" onclick="renderNavigationSidebar(' + i.toString() + ')">' + i.toString() + '</a>';					
 	}else{
@@ -188,9 +195,9 @@ function render_pagination_values(currentPage, i){
 }
 
 function clear_pagination_values(){
-	var pagination = document.getElementById("pagination");
-	var num_states_lbl = document.getElementById("num_states_lbl");
-	var currentPageIn = document.getElementById("currentPage");
+	var pagination = analysis.page.getElementById("pagination");
+	var num_states_lbl = analysis.page.getElementById("num_states_lbl");
+	var currentPageIn = analysis.page.getElementById("currentPage");
 	
 	pagination.innerHTML = "";
 	num_states_lbl.innerHTML = "";
@@ -198,7 +205,7 @@ function clear_pagination_values(){
 }
 
 function goToState(){ 
-	var requiredState = parseInt(document.getElementById("requiredState").value);
+	var requiredState = parseInt(analysis.page.getElementById("requiredState").value);
 	var nextSteps_array_size = analysisResult.allSolution.length;
 
 	if((requiredState != "NaN") && (requiredState > 0)){
@@ -213,10 +220,10 @@ function goToState(){
 var tempResults;
 
 function add_filter(){
-	tempResults = $.extend(true,{}, originalResults);
+	tempResults = $.extend(true,{}, analysis.parent.results);
 
-	for(var i_element = 0; i_element < document.getElementsByClassName("filter_checkbox").length; i_element++){
-		checkbox = document.getElementsByClassName("filter_checkbox")[i_element]
+	for(var i_element = 0; i_element < analysis.page.getElementsByClassName("filter_checkbox").length; i_element++){
+		checkbox = analysis.page.getElementsByClassName("filter_checkbox")[i_element]
 
 		if((checkbox.id == "conflictFl") && (checkbox.checked)){
 			for(var i_sol = 0 ; i_sol < tempResults.allSolution.length; i_sol++){

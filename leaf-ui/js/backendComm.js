@@ -6,7 +6,7 @@ function backendComm(js_object){
 	/**
 	* Print the input to the console.
 	*/
-	console.log(JSON.stringify(js_object));
+	//console.log(JSON.stringify(js_object));
 	global_analysisResult.currentState = js_object.analysis.currentState;
 	//backend script called
 	var pathToCGI = "./cgi-bin/backendCom.cgi";
@@ -68,7 +68,7 @@ function getFileResults(isGetNextSteps){
 				/**
 					* Print the response data to the console.
 				*/
-					console.log(JSON.stringify(JSON.parse(response['data'])));
+				//console.log(JSON.stringify(JSON.parse(response['data'])));
 
 				global_analysisResult = analysisResults;
 				if (analysisResults == ""){

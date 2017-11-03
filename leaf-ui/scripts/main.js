@@ -197,7 +197,7 @@ function testMain(){
 }
 // Save links or constraints
 function saveLinks(mode){
-	console.log("called in saved links");
+	//console.log("called in saved links");
 	// Hide all relationships that are not suppose to be dispalyed
 
 	if(mode == "View"){
@@ -212,19 +212,19 @@ function saveLinks(mode){
 			}else{link.remove();}
 		});
 	}else if (mode == "Constraints"){
-		console.log("called in saved links constraints");
+		//console.log("called in saved links constraints");
 		var links = graph.getLinks();
 		graph.intensionConstraints = [];
 		links.forEach(function(link){
 			var linkStatus = link.attributes.labels[0].attrs.text.text.replace(/\s/g, '');
 
 			if(!isLinkInvalid(link) && (linkStatus != "constraint") && (linkStatus != "error")){
-				console.log(linkStatus);
-				console.log(isLinkInvalid(link));
-				console.log(link.attr('./display'));
+				//console.log(linkStatus);
+				//console.log(isLinkInvalid(link));
+				//console.log(link.attr('./display'));
 				//if(!link.attr('./display')){
 				//	link.attr('./display', 'none');
-				console.log(link);
+				//console.log(link);
 				graph.intensionConstraints.push(link);
 				//}
 			}else{link.remove();}
@@ -239,7 +239,7 @@ function saveLinks(mode){
 //Switch to analysis mode
 $('#analysis-btn').on('click', function(){
 
-	console.log(linkMode);
+	//console.log(linkMode);
 	/* Comment these for now.
 	if (linkMode == "View")
 		//$('#symbolic-btn').trigger( "click" );
@@ -301,9 +301,9 @@ $('#cycledetect-btn').on('click', function(e){
 	else{
 		var verticies = js_object.analysis.elementList;
 		var links = jslinks;
-		console.log(verticies)
-		console.log(graph.getElements());
-		console.log(links);
+		//console.log(verticies)
+		//console.log(graph.getElements());
+		//console.log(links);
 		//If there is no cycle, leave the color the way it was
 		if (cycleCheck(links, verticies) == false){
 			swal("No cycle in the graph", "", "success");
@@ -1196,7 +1196,7 @@ $('#btn-clear-flabel').on('click', function(){
 // cycle detection function
 $('#btn-clear-cycle').on('click',function(){
 	var cycleElements = graph.getElements();
-	console.log(cycleElements);
+	//console.log(cycleElements);
 
 	var elements = graph.getElements();
 	for (var i = 0; i < elements.length; i++){
@@ -1345,16 +1345,16 @@ function toBackEnd(simulationType, stepVal, epochVal, queryValA, queryValB){
 }
 
 function postData(simulationType, leafLines, queryLines, cspHistoryLines, queryNum){
-	console.log("simulationType");
-	console.log(simulationType);
-	console.log("leafLines");
-	console.log(leafLines);
-	console.log("queryLines");
-	console.log(queryLines);
-	console.log("cspHistoryLines");
-	console.log(cspHistoryLines);
-	console.log("queryNum");
-	console.log(queryNum);
+	//console.log("simulationType");
+	//console.log(simulationType);
+	//console.log("leafLines");
+	//console.log(leafLines);
+	//console.log("queryLines");
+	//console.log(queryLines);
+	//console.log("cspHistoryLines");
+	//console.log(cspHistoryLines);
+	//console.log("queryNum");
+	//console.log(queryNum);
 
 	var data = {};
 	if(queryNum == -1){
@@ -1365,8 +1365,8 @@ function postData(simulationType, leafLines, queryLines, cspHistoryLines, queryN
 		data.simgraph = JSON.stringify(graph.toJSON());
 		queryNum++;
   }
-  console.log('data');
-  console.log(data);
+	//console.log('data');
+	//console.log(data);
 	//Send data to backend for analysis
 	$.post("./cgi-bin/handleupload2.cgi", data, function(results, status){
 		if(status == "success"){
@@ -1496,7 +1496,7 @@ function generateLeafFile(){
 		if (elements[e].get("parent")){
 			actorid = (graph.getCell(elements[e].get("parent")).prop("elementid") || "-");
 		}
-		console.log(actorid);
+		//console.log(actorid);
 
 	// Print NT in "core" of tool where time does not exist.
 	//datastring += ("I\t" + actorid + "\t" + elementID + "\t" + (functions[elements[e].attr(".funcvalue/text")] || "NT") + "\t");

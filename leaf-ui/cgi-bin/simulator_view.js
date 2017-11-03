@@ -31,7 +31,7 @@ for (var i = 0; i < all_elements.length; i++){
 
 //Update the graph for time 'value'
 function updateGraph(value){
-	console.log('UpdateGraph simulator-view');
+	//console.log('UpdateGraph simulator-view');
 	elements[elements.length - 1].attr("text/text", "t = " + value);
 	for (var i = 0; i < results.length; i++){
 		var curr_results = results[i].split('\t');
@@ -48,7 +48,7 @@ function updateGraph(value){
 
 //Update the satisfaction value of a particular node in the graph
 function updateValues(cell, value){
-	console.log('Updatevalue simulator-view');
+	//console.log('Updatevalue simulator-view');
 	var satvalues = ["denied", "partiallydenied", "partiallysatisfied", "satisfied", "conflict", "unknown", "none"];
 	elements[cell].attr("satvalue/value", satvalues[value]);
 
