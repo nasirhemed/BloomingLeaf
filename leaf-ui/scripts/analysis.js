@@ -78,8 +78,8 @@ function init(){
 function renderNavigationSidebar(currentPage = 0){
 	clear_pagination_values();
 	
-	var currentPageIn = analysis.page.getElementById("currentPage");
-	var num_states_lbl = analysis.page.getElementById("num_states_lbl");
+	var currentPageIn = document.getElementById("currentPage");
+	var num_states_lbl = document.getElementById("num_states_lbl");
 	num_states_lbl.innerHTML += (analysisResult.allSolution.length);
 	
 	currentPageIn.value = currentPage.toString();
@@ -139,7 +139,7 @@ function updateNodesValues(currentPage, step = 0){
 }
 
 function updatePagination(currentPage){
-	var pagination = analysis.page.getElementById("pagination");
+	var pagination = document.getElementById("pagination");
 	var nextSteps_array_size = analysisResult.allSolution.length;
 	if(nextSteps_array_size > 6){
 		renderPreviousBtn(pagination, currentPage);
@@ -191,7 +191,7 @@ function renderForwardBtn(pagination, currentPage){
 }
 
 function render_pagination_values(currentPage, i){
-	var pagination = analysis.page.getElementById("pagination");
+	var pagination = document.getElementById("pagination");
 	if(currentPage == i){
 		pagination.innerHTML += '<a href="#" class="active" onclick="renderNavigationSidebar(' + i.toString() + ')">' + i.toString() + '</a>';					
 	}else{
@@ -200,9 +200,9 @@ function render_pagination_values(currentPage, i){
 }
 
 function clear_pagination_values(){
-	var pagination = analysis.page.getElementById("pagination");
-	var num_states_lbl = analysis.page.getElementById("num_states_lbl");
-	var currentPageIn = analysis.page.getElementById("currentPage");
+	var pagination = document.getElementById("pagination");
+	var num_states_lbl = document.getElementById("num_states_lbl");
+	var currentPageIn = document.getElementById("currentPage");
 	
 	pagination.innerHTML = "";
 	num_states_lbl.innerHTML = "";
@@ -210,7 +210,7 @@ function clear_pagination_values(){
 }
 
 function goToState(){ 
-	var requiredState = parseInt(analysis.page.getElementById("requiredState").value);
+	var requiredState = parseInt(document.getElementById("requiredState").value);
 	var nextSteps_array_size = analysisResult.allSolution.length;
 
 	if((requiredState != "NaN") && (requiredState > 0)){
@@ -227,8 +227,8 @@ var tempResults;
 function add_filter(){
 	tempResults = $.extend(true,{}, analysis.parent.results);
 
-	for(var i_element = 0; i_element < analysis.page.getElementsByClassName("filter_checkbox").length; i_element++){
-		checkbox = analysis.page.getElementsByClassName("filter_checkbox")[i_element]
+	for(var i_element = 0; i_element < document.getElementsByClassName("filter_checkbox").length; i_element++){
+		checkbox = document.getElementsByClassName("filter_checkbox")[i_element]
 
 		if((checkbox.id == "conflictFl") && (checkbox.checked)){
 			for(var i_sol = 0 ; i_sol < tempResults.allSolution.length; i_sol++){
