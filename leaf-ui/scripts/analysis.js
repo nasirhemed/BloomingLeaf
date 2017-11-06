@@ -1,74 +1,79 @@
-window.onload = function(){
-	renderNavigationSidebar();	
-}
-
 //Defining local scope
 var analysis = {};
-//This attribute has the html elements from parent page
+//This merge the attributes of old page and new page
 analysis.page = jQuery.extend({}, window.opener.document);
 
-//Page objects
-analysis.graph = new joint.dia.Graph();
-analysis.paper;
-analysis.paperScroller;
+//Executing scripts only when page is fully loaded
+window.onload = function(){
+	renderNavigationSidebar();
+	init();
+}
 
-//Objects from parent page
-analysis.parent.results = jQuery.extend({}, window.opener.global_analysisResult);
+function initi(){
+	//Page objects
+	analysis.graph = new joint.dia.Graph();
+	analysis.paper;
+	analysis.paperScroller;
 
-var analysisResult;
-var elements = [];
-var currentState;
+	//Objects from parent page
+	analysis.parent.results = jQuery.extend({}, window.opener.global_analysisResult);
 
-analysis.paper = new joint.dia.Paper({
-    width: 1200,
-    height: 600,
-    gridSize: 10,
-    perpendicularLinks: false,
-    model: analysis.graph,
-    defaultLink: new joint.dia.Link({
-		'attrs': {
-			'.connection': {stroke: '#000000'},
-			'.marker-source': {'d': '0'},
-			'.marker-target': {stroke: '#000000', "d": 'M 10 0 L 0 5 L 10 10 L 0 5 L 10 10 L 0 5 L 10 5 L 0 5'}
-			},
-		'labels': [{position: 0.5, attrs: {text: {text: "and"}}}]
-	})
-});
+	var analysisResult;
+	var elements = [];
+	var currentState;
 
-analysis.paperScroller = new joint.ui.PaperScroller({
-	autoResizePaper: true,
-	paper: analysis.paper
-});
+	analysis.paper = new joint.dia.Paper({
+	    width: 1200,
+	    height: 600,
+	    gridSize: 10,
+	    perpendicularLinks: false,
+	    model: analysis.graph,
+	    defaultLink: new joint.dia.Link({
+			'attrs': {
+				'.connection': {stroke: '#000000'},
+				'.marker-source': {'d': '0'},
+				'.marker-target': {stroke: '#000000', "d": 'M 10 0 L 0 5 L 10 10 L 0 5 L 10 10 L 0 5 L 10 5 L 0 5'}
+				},
+			'labels': [{position: 0.5, attrs: {text: {text: "and"}}}]
+		})
+	});
 
-$('#paper').append(analysis.paperScroller.render().el);
-analysis.paperScroller.center();
+	analysis.paperScroller = new joint.ui.PaperScroller({
+		autoResizePaper: true,
+		paper: analysis.paper
+	});
 
-//Load graph by the cookie
-if (analysis.page.cookie){
-	var cookies = analysis.page.cookie.split(";");
-	var prevgraph = "";
+	$('#paper').append(analysis.paperScroller.render().el);
+	analysis.paperScroller.center();
 
-	//Loop through the cookies to find the one representing the graph, if it exists
-	for (var i = 0; i < cookies.length; i++){
-		if (cookies[i].indexOf("graph=") >= 0){
-			prevgraph = cookies[i].substr(6);
-			break;
+	//Load graph by the cookie
+	if (analysis.page.cookie){
+		var cookies = analysis.page.cookie.split(";");
+		var prevgraph = "";
+
+		//Loop through the cookies to find the one representing the graph, if it exists
+		for (var i = 0; i < cookies.length; i++){
+			if (cookies[i].indexOf("graph=") >= 0){
+				prevgraph = cookies[i].substr(6);
+				break;
+			}
+		}
+
+		if (prevgraph){
+			analysis.graph.fromJSON(JSON.parse(prevgraph));
 		}
 	}
 
-	if (prevgraph){
-		analysis.graph.fromJSON(JSON.parse(prevgraph));
+	//Filter out Actors
+	for (var e = 0; e < analysis.graph.getElements().length; e++){
+		if (!(analysis.graph.getElements()[e] instanceof joint.shapes.basic.Actor))
+			elements.push(analysis.graph.getElements()[e]);
+	}
+
+	if(!analysisResult){
+		analysisResult = analysis.parent.results;
 	}
 }
-
-//Filter out Actors
-for (var e = 0; e < analysis.graph.getElements().length; e++){
-	if (!(analysis.graph.getElements()[e] instanceof joint.shapes.basic.Actor))
-		elements.push(analysis.graph.getElements()[e]);
-}
-
-if(!analysisResult)
-	analysisResult = analysis.parent.results;
 	
 function renderNavigationSidebar(currentPage = 0){
 	clear_pagination_values();
@@ -280,7 +285,8 @@ function add_filter(){
 
 //This function should get the current state in the screen and save in the original path
 function save_current_state(){
-	window.opener.get_popup_currentValue(currentState);
+	el = document.getElementById("modal_save_next_state");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 }
 
 //This function should get the current state and generate a new window with the next possible states

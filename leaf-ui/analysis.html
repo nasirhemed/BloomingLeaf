@@ -86,7 +86,8 @@
         	   <input id="ttFl" class="filter_checkbox" type="checkbox" onclick="add_filter()"><font color="white"> Remove (T,T)</font><br>
         <br>
         <label>Actions</label>
-        	      		<button class="inspector-btn" onclick="save_current_state()">Save</button>
+        	      		<!-- button class="inspector-btn" onclick="save_current_state()">Save</button -->
+        	      		<button class="inspector-btn" data-toggle="modal" data-target="#modal_save_next_state">Save</button>
         	      		<button class="inspector-btn" onclick="generate_next_states()">Explore Next States</button>
         	      		<button class="inspector-btn" onclick="window.close();">Close</button>
         </div>
@@ -95,11 +96,28 @@
 
         <div id="paper">
         </div>
+		
+		<!-- Modal -->
+		<div id="modal_save_next_state" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+		
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Modal Header</h4>
+		      </div>
+		      <div class="modal-body">
+		        <p>Some text in the modal.</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		
+		  </div>
+		</div>
 
-<!--        
-        <div id="slider"></div>
-        <span id="sliderValue"></span>
--->
         <script type="text/javascript">
             SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(toElement) {
             return toElement.getScreenCTM().inverse().multiply(this.getScreenCTM());
@@ -130,7 +148,7 @@
         <script src="./rappid-extensions/ConstraintsInspector.js"></script>
         <script src="./rappid-extensions/AnalysisInspector.js"></script>
         <script src="./rappid-extensions/joint.extensions.js"></script>
-
+        
         <script src="./scripts/analysis.js"></script>
 			
     </body>
