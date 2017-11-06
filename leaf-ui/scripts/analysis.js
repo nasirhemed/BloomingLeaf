@@ -5,8 +5,8 @@ analysis.page = jQuery.extend({}, window.opener.document);
 
 //Executing scripts only when page is fully loaded
 window.onload = function(){
-	renderNavigationSidebar();
 	init();
+	renderNavigationSidebar();
 }
 
 function init(){
