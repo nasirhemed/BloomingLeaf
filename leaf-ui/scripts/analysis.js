@@ -16,7 +16,7 @@ function init(){
 	analysis.paperScroller;
 
 	//Objects from parent page
-	analysis.parent.results = jQuery.extend({}, window.opener.global_analysisResult);
+	analysis.parentResults.results = jQuery.extend({}, window.opener.global_analysisResult);
 
 	var analysisResult;
 	var elements = [];
@@ -71,7 +71,7 @@ function init(){
 	}
 
 	if(!analysisResult){
-		analysisResult = analysis.parent.results;
+		analysisResult = analysis.parentResults;
 	}
 }
 	
@@ -225,7 +225,7 @@ function goToState(){
 var tempResults;
 
 function add_filter(){
-	tempResults = $.extend(true,{}, analysis.parent.results);
+	tempResults = $.extend(true,{}, analysis.parentResults);
 
 	for(var i_element = 0; i_element < document.getElementsByClassName("filter_checkbox").length; i_element++){
 		checkbox = document.getElementsByClassName("filter_checkbox")[i_element]
