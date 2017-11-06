@@ -289,7 +289,7 @@ function add_filter(){
 //This function should get the current state in the screen and save in the original path
 function save_current_state(){
 	var modal = document.getElementById("modal_save_next_state");
-	modal.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	modal.style.visibility = (modal.style.visibility == "visible") ? "hidden" : "visible";
 	
 	modal.content = document.getElementById("modal_content");
 	analysis.storage = jQuery.extend({}, window.opener.storage);
