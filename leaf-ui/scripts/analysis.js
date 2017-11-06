@@ -9,7 +9,7 @@ window.onload = function(){
 	init();
 }
 
-function initi(){
+function init(){
 	//Page objects
 	analysis.graph = new joint.dia.Graph();
 	analysis.paper;
