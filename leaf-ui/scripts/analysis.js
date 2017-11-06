@@ -288,11 +288,12 @@ function add_filter(){
 
 //This function should get the current state in the screen and save in the original path
 function save_current_state(){
-	el = document.getElementById("modal_save_next_state");
-	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	var modal = document.getElementById("modal_save_next_state");
+	modal.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 	
+	modal.content = document.getElementById("modal_content");
 	analysis.storage = jQuery.extend({}, window.opener.storage);
-	el.append(JSON.stringify(analysis.storage, null, "\t"));
+	modal.content.append(JSON.stringify(analysis.storage, null, "4"));
 }
 
 //This function should get the current state and generate a new window with the next possible states
