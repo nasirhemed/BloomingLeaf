@@ -290,6 +290,9 @@ function add_filter(){
 function save_current_state(){
 	el = document.getElementById("modal_save_next_state");
 	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	
+	analysis.storage = jQuery.extend({}, window.opener.storage);
+	el.append(JSON.stringify(analysis.storage, null, "\t"));
 }
 
 //This function should get the current state and generate a new window with the next possible states

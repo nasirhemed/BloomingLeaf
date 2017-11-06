@@ -1,3 +1,14 @@
+//Defining a scope to store all data being executed
+var storage = {};
+//Store the information sent to backend for single path analysis
+storage.singlePathAnalysis = {};
+//Store the results from backend analysis for single path
+storage.singlePathResults = {};
+//Store the information sent to backend for next states analysis
+storage.nextStatesAnalysis = {};
+//Store the results from backend analysis for next states
+storage.nextStatesResults = {};
+
 var global_originalAnalysis = {};
 var exploreAnalysisCurrentState = 0;
 var global_analysisResult = {};
@@ -19,9 +30,12 @@ function backendComm(js_object){
 		success: function(response){
 			setTimeout(function(){
 				if(js_object.analysis.action=="allNextStates"){
+					storage.nextStatesAnalysis = js_object;
 					exploreAnalysisCurrentState = js_object.analysis.currentState.split("|")[0];
 					executeJava(true);
 				}else{
+					storage.singlePathAnalysis = js_object;
+					//TODO: remove global_originalAnalysis and replace with singlePathAnalysis
 					global_originalAnalysis = js_object;
 					executeJava(false);
 				}
@@ -69,15 +83,17 @@ function getFileResults(isGetNextSteps){
 					* Print the response data to the console.
 				*/
 				//console.log(JSON.stringify(JSON.parse(response['data'])));
-
+				//TODO: remove the global_analysisResult it should be deprecated
 				global_analysisResult = analysisResults;
 				if (analysisResults == ""){
 					alert("Error while reading the resonse file from server. This can be due an error in executing java application.")
 					return
 				}
 				if(isGetNextSteps){
+					storage.nextStatesResults = analysisResults;
 					open_analysis_viewer();
 				}else{
+					storage.singlePathResults = analysisResults;
 					loadAnalysis(analysisResults);
 					var currentValueLimit = parseInt(sliderObject.sliderElement.noUiSlider.get());
 					var sliderMax = currentValueLimit + currentAnalysis.timeScale;
