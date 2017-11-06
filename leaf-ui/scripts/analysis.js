@@ -1,5 +1,10 @@
 //Defining local scope
 var analysis = {};
+
+analysis.analysisResult;
+analysis.elements = [];
+analysis.currentState;
+
 //This merge the attributes of old page and new page
 analysis.page = jQuery.extend({}, window.opener.document);
 
@@ -16,11 +21,9 @@ function init(){
 	analysis.paperScroller;
 
 	//Objects from parent page
-	analysis.parentResults.results = jQuery.extend({}, window.opener.global_analysisResult);
+	analysis.parentResults = jQuery.extend({}, window.opener.global_analysisResult);
 
-	var analysisResult;
-	var elements = [];
-	var currentState;
+
 
 	analysis.paper = new joint.dia.Paper({
 	    width: 1200,
@@ -67,11 +70,11 @@ function init(){
 	//Filter out Actors
 	for (var e = 0; e < analysis.graph.getElements().length; e++){
 		if (!(analysis.graph.getElements()[e] instanceof joint.shapes.basic.Actor))
-			elements.push(analysis.graph.getElements()[e]);
+			analysis.elements.push(analysis.graph.getElements()[e]);
 	}
 
-	if(!analysisResult){
-		analysisResult = analysis.parentResults;
+	if(!analysis.analysisResult){
+		analysis.analysisResult = analysis.parentResults;
 	}
 }
 	
@@ -80,7 +83,7 @@ function renderNavigationSidebar(currentPage = 0){
 	
 	var currentPageIn = document.getElementById("currentPage");
 	var num_states_lbl = document.getElementById("num_states_lbl");
-	num_states_lbl.innerHTML += (analysisResult.allSolution.length);
+	num_states_lbl.innerHTML += (analysis.analysisResult.allSolution.length);
 	
 	currentPageIn.value = currentPage.toString();
 	
@@ -94,13 +97,13 @@ function updateNodesValues(currentPage, step = 0){
 		currentPage = 0;
 
 	//Set the currentState variable so it can be sent back to the original path
-	currentState = analysisResult.allSolution[currentPage];
+	analysis.currentState = analysis.analysisResult.allSolution[currentPage];
 
 	var cell;
 	var value;
-	for(var i = 0; i < elements.length; i++){
-		cell = elements[i];
-		value = analysisResult.allSolution[currentPage].intentionElements[i].status[step];
+	for(var i = 0; i < analysis.elements.length; i++){
+		cell = analysis.elements[i];
+		value = analysis.analysisResult.allSolution[currentPage].intentionElements[i].status[step];
 		cell.attributes.attrs[".satvalue"].value = value;
 		
 		//Change backend value to user friendly view
@@ -140,7 +143,7 @@ function updateNodesValues(currentPage, step = 0){
 
 function updatePagination(currentPage){
 	var pagination = document.getElementById("pagination");
-	var nextSteps_array_size = analysisResult.allSolution.length;
+	var nextSteps_array_size = analysis.analysisResult.allSolution.length;
 	if(nextSteps_array_size > 6){
 		renderPreviousBtn(pagination, currentPage);
 		if(currentPage - 3 < 0){
@@ -180,7 +183,7 @@ function renderPreviousBtn(pagination, currentPage){
 
 function renderForwardBtn(pagination, currentPage){
 	var value;
-	var nextSteps_array_size = analysisResult.allSolution.length;
+	var nextSteps_array_size = analysis.analysisResult.allSolution.length;
 
 	if(currentPage == nextSteps_array_size-1){
 		value = currentPage;
@@ -211,7 +214,7 @@ function clear_pagination_values(){
 
 function goToState(){ 
 	var requiredState = parseInt(document.getElementById("requiredState").value);
-	var nextSteps_array_size = analysisResult.allSolution.length;
+	var nextSteps_array_size = analysis.analysisResult.allSolution.length;
 
 	if((requiredState != "NaN") && (requiredState > 0)){
 		if(requiredState > nextSteps_array_size){
@@ -233,7 +236,7 @@ function add_filter(){
 		if((checkbox.id == "conflictFl") && (checkbox.checked)){
 			for(var i_sol = 0 ; i_sol < tempResults.allSolution.length; i_sol++){
 				var remove = false;
-				for(var i = 0; i < elements.length; i++){
+				for(var i = 0; i < analysis.elements.length; i++){
 					value = tempResults.allSolution[i_sol].intentionElements[i].status[0];
 					if (	(value == "0110") || 
 							(value == "0111") || 
@@ -249,7 +252,7 @@ function add_filter(){
 					}
 				}
 				if(remove){
-					for(var i = 0; i < elements.length; i++){
+					for(var i = 0; i < analysis.elements.length; i++){
 						tempResults.elementList[i].valueList.splice(i_states,1);
 					}
 					i_states--;
@@ -260,7 +263,7 @@ function add_filter(){
 		if((checkbox.id == "ttFl") && (checkbox.checked)){
 			for(var i_states = 0 ; i_states < tempResults.elementList[0].valueList.length; i_states++){
 				var remove = false;
-				for(var i = 0; i < elements.length; i++){
+				for(var i = 0; i < analysis.elements.length; i++){
 					value = tempResults.elementList[i].valueList[i_states];
 					if (value == "0000"){
 						remove = true;
@@ -268,7 +271,7 @@ function add_filter(){
 					}
 				}
 				if(remove){
-					for(var i = 0; i < elements.length; i++){
+					for(var i = 0; i < analysis.elements.length; i++){
 						tempResults.elementList[i].valueList.splice(i_states,1);
 					}
 					i_states--;
@@ -278,7 +281,7 @@ function add_filter(){
 
 	}
 
-	this.analysisResult = tempResults;
+	analysis.analysisResult = tempResults;
 	
 	renderNavigationSidebar();
 }
