@@ -514,6 +514,7 @@ var AnalysisInspector = Backbone.View.extend({
 			var srcEB = row.find('td').html();
 			var func_value = row.find('td:nth-child(2)').html();
 			var id = row.find('input[type=hidden]').val();
+			var time_values = {};
 			// If func is not UD, just find the cell and update it
 			if (func_value != 'UD'){
 				var cell = graph.getCell(id);
